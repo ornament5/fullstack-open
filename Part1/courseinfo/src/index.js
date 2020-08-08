@@ -23,7 +23,7 @@ const Part = ({name, exercisesCount}) => <p>{name} {exercisesCount}</p>;
 const Total = ({parts}) => {
   return (
     <p>Number of exercises &nbsp;
-      {parts.reduce((sum, currentPart) => sum + currentPart.exercises)}
+      {parts.reduce((sum, currentPart) => sum + currentPart.exercise,0)}
     </p>);
 };
 
