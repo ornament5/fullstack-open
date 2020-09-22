@@ -78,9 +78,9 @@ const App = () => {
     if (newName !== '') {
       if (isNameDuplicate(newName, persons)) {
         const updatePersonConfirmed = window.confirm(`${newName} is already added to the phonebook, replace the old number with the new one?`);
-        const personToUpdate = persons.find(person => person.name === newName);
-        const updatedPerson = {...personToUpdate, number:newNumber};
         if (updatePersonConfirmed) {
+          const personToUpdate = persons.find(person => person.name === newName);
+          const updatedPerson = {...personToUpdate, number:newNumber};
           personService.update(personToUpdate.id, updatedPerson)
             .then(updatedPerson => {
               setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
@@ -88,7 +88,12 @@ const App = () => {
               setNewNumber('');}
             )
             .catch((error) => {
-              showAlert('error', `Information of ${newName} has already been removed from server`);
+              let errorMessage = `Information of ${newName} has already been removed from server`
+              if (error.response.data.error.errors.number &&
+                error.response.data.error.errors.number.name === 'ValidatorError') {
+                  errorMessage = error.response.data.error.message
+              }                
+              showAlert('error', errorMessage);
             });
         }
       } else {
@@ -98,18 +103,21 @@ const App = () => {
           showAlert('success', `Added ${newName}`);
           setNewName('');
           setNewNumber('');
+        })
+        .catch(error => {
+          showAlert('error', error.response.data.error.message);          
         });
-      }
-    } 
+      };  
+    };
   };
 
   const handleDeletePerson = (id) => {
     const personName = persons.find(person => person.id === id).name;
     const deleteConfirmed = window.confirm(`Delete ${personName}?`);
-    if (deleteConfirmed) {
+    if (deleteConfirmed) {      
       personService.remove(id)
       .then(status => {
-        if (status === 200) {
+        if (status === 204) {
           setPersons(persons.filter(person => person.id !== id));
         }
       });
