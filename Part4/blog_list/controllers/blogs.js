@@ -18,7 +18,6 @@ blogsRouter.post('/', async (request, response, next) => {
   }
 
   const user = await User.findById(decodedToken.id)
-  
   const blog = new Blog({...request.body, user:user._id})
   if (blog.title && blog.url) {
     if (!blog.likes) {
@@ -26,6 +25,7 @@ blogsRouter.post('/', async (request, response, next) => {
     }  
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id) 
+    await user.save()
     response.status(201).json(savedBlog)
   } else {
     response.status(400).end()
@@ -57,7 +57,7 @@ blogsRouter.put('/:id', async (request, response) => {
     ...body
   }
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, updatedInformation, { new: true, runValidators: true, context: 'query' })
-    response.json(updatedBlog)
+  response.json(updatedBlog)
 })
 
 module.exports = blogsRouter
