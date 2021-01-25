@@ -70,10 +70,10 @@ const App = () => {
   }
 
   const handleNewBlogCreation = async (newBlog) => {
-    blogFormRef.current.toggleVisibility()
     const createdBlog = await blogService.create(newBlog)
+    blogFormRef.current.toggleVisibility()
     showNotification('success', `New blog created: "${createdBlog.title}"`)
-    setBlogs(blogs.concat(createdBlog))
+    setBlogs(blogs.concat({ ...createdBlog, user: { name:user.name, username: user.username } }))
   }
 
   const handleBlogLiked = async (blogId) => {

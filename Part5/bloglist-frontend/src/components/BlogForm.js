@@ -27,12 +27,12 @@ const BlogForm = ({ createBlog }) => {
       <br/>
       <label>
         author:
-        <input value={author} name='author' onChange={e => setAuthor(e.target.value)}/>
+        <input id='author' value={author} name='author' onChange={e => setAuthor(e.target.value)}/>
       </label>
       <br/>
       <label>
         url:
-        <input value={url} name='url' onChange={e => setUrl(e.target.value)}/>
+        <input id='url' value={url} name='url' onChange={e => setUrl(e.target.value)}/>
       </label>
       <br/>
       <button type="submit">create</button>

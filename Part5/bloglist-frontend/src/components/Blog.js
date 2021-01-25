@@ -12,7 +12,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
 
   let additionalDetails = null
   let buttonText = 'view'
-  let removeButton = null
+  let removeButton = 'Blaaa'
   const loggedUser = JSON.parse(localStorage.getItem('blogAppLoggedUser'))
   if(loggedUser && blog.user.username === loggedUser.username) {
     removeButton = <button onClick = {() => removeBlog(blog.id)}>remove</button>
